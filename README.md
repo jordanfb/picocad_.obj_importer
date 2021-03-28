@@ -3,3 +3,7 @@ requires Python3
 
 In terminal:
 `python importobj.py {obj file} {scale(optional)}`
+
+I advise using some tool to shrink the number of polygons before importing it to picocad, or else picocad may be unresponsive, or unbearably slow.
+I used meshlab's "quadratic edge collapse decimation" to do this for meshes that were supposedly "low-poly"
+Not by picocad's standards ;)
