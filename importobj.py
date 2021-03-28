@@ -14,10 +14,11 @@ try:
 except:
         print("scaling:"+ str(scalar))
 with open("object"+file+".txt","w") as f:
-	f.write("picocad;obj"+file+";7;0;0\n{\n{"+"\n"+"name='obj', pos={0,0,0}, rot={0,0,0},"+"\n"+"v={\n")
+	f.write("picocad;obj"+file+";7;0;11\n{\n{"+"\n"+"name='obj', pos={0,0,0}, rot={0,0,0},"+"\n"+"v={\n")
 with open(sys.argv[1]) as n:
 	with open("object"+file+".txt","a") as f:	
 		obj=n.read().split("\n")
+		f
 		for line in obj:
 			x=str(line)
 			if x.startswith("v "):
