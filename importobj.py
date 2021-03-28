@@ -9,7 +9,7 @@ vertices=0
 faces=0
 scalar=1
 try:
-        scalar=int(sys.argv[2])
+        scalar=float(sys.argv[2])
         print("scaling:"+ str(scalar))
 except:
         print("scaling:"+ str(scalar))
