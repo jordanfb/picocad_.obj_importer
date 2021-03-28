@@ -60,7 +60,7 @@ with open(sys.argv[1]) as n:
 					f.write("uv={")
 					
 					for faceVertex in range(len(faceVertices)):
-						uvVertexPair=str(int(math.sin(faceVertex/len(faceVertices)*2*math.pi+math.pi/4)*32*16/11.5)/4+8)+","+str(int(math.cos(faceVertex/len(faceVertices)*2*math.pi+math.pi/4)*32*16/11.5)/4+8)
+						uvVertexPair=str(int(math.sin(faceVertex/len(faceVertices)*2*math.pi+math.pi/4)*16*16/11.5)/4+8)+","+str(int(math.cos(faceVertex/len(faceVertices)*2*math.pi+math.pi/4)*16*16/11.5)/4+8)
 						if faceVertex==len(faceVertices)-1:
 							f.write(uvVertexPair)
 						else:
@@ -71,7 +71,7 @@ with open(sys.argv[1]) as n:
 					f.write("uv={")
 					
 					for faceVertex in range(len(faceVertices)):
-						uvVertexPair=str(int(math.sin(faceVertex/len(faceVertices)*2*math.pi+math.pi/4)*32*16/11.5)/4+8)+","+str(int(math.cos(faceVertex/len(faceVertices)*2*math.pi+math.pi/4)*32*16/11.5)/4+8)
+						uvVertexPair=str(int(math.sin(faceVertex/len(faceVertices)*2*math.pi+math.pi/4)*16*16/11.5)/4+8)+","+str(int(math.cos(faceVertex/len(faceVertices)*2*math.pi+math.pi/4)*16*16/11.5)/4+8)
 						if faceVertex==len(faceVertices)-1:
 							f.write(uvVertexPair)
 						else:
