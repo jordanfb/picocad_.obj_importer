@@ -50,7 +50,7 @@ with open(sys.argv[1]) as n:
 				face=re.sub("f ","", x).strip()
 				faceVertices=face.split(" ");
 				for x in range(len(faceVertices)):
-					faceVertices[x]=faceVertices[x][0]
+					faceVertices[x]=faceVertices[x].split("/")[0]
 				face=",".join(faceVertices)
 				#-1,-0.25,  17,-0.25,  16.25,15,  -0.75,15
 				#
@@ -201,6 +201,7 @@ with open(sys.argv[1]) as n:
 	"00099999099999099099999999099099909909909990990909090990909999999999994504999999999999999999999999999999999999999999999999999999\n"+
 	"99999999099999999000009909900999909909909990999090990990900000999999940049999999999999999999999999999999999999999999999999999999\n")
 print(str(vertices)+" vertices exported")
+print(str(faces)+" faces exported")
 	
 
 	
