@@ -16,4 +16,4 @@ I ran the toaster example through the .obj exporter, and back through this .obj 
 ## Before:  
 ![alt text](https://github.com/Zinc-OS/picocad_.obj_importer/blob/main/files/picocad_4.gif)  
 ## After:  
-![alt text](https://github.com/Zinc-OS/picocad_.obj_importer/blob/main/files/picocad_3.gif)  
+![alt text](https://github.com/Zinc-OS/picocad_.obj_importer/blob/main/files/picocad_5.gif)  
