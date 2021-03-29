@@ -30,7 +30,7 @@ with open(sys.argv[1]) as n:
 			if x.startswith("mtllib"):
 				mtl=x.split(" ")[0]
 			if x.startswith("vt "):
-				vtlist.append([int(float(x.split(" ")[1])*16*4)/4,int(float(x.split(" ")[2])*16*4)/4])
+				vtlist.append([round(float(x.split(" ")[1])*16*4)/4,round(float(x.split(" ")[2])*16*4)/4])
 				
 		currentVertex=0
 		for line in obj:
@@ -40,7 +40,7 @@ with open(sys.argv[1]) as n:
 				vertex=re.sub("v ","", x).strip()
 				points=vertex.split(" ")
 				for x in range(len(points)):
-					points[x]=str(int(float(points[x])*4*scalar)/4)
+					points[x]=str(round(float(points[x])*4*scalar)/4)
 				vertex=",".join(points)
 				if currentVertex==vertices:
 					f.write("{"+vertex+"}\n")
