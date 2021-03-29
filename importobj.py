@@ -3,6 +3,10 @@ import random
 import re
 import time
 import math
+try:
+	from PIL import Image
+except:
+	print("Pillow is not installed. Any texture cannot be loaded")
 file= time.time()
 file=str(file)
 vertices=0
@@ -10,93 +14,7 @@ faces=0
 scalar=1
 vtlist=[]
 mtl=None
-try:
-        scalar=float(sys.argv[2])
-        print("scaling:"+ str(scalar))
-except:
-        print("scaling:"+ str(scalar))
-with open("object"+file+".txt","w") as f:
-	f.write("picocad;obj"+file+";7;0;11\n{\n{"+"\n"+"name='obj', pos={0,0,0}, rot={0,0,0},"+"\n"+"v={\n")
-with open(sys.argv[1]) as n:
-	with open("object"+file+".txt","a") as f:	
-		obj=n.read().split("\n")
-		f
-		for line in obj:
-			x=str(line)
-			if x.startswith("v "):
-				vertices+=1
-			if x.startswith("f "):
-				faces+=1
-			if x.startswith("mtllib"):
-				mtl=x.split(" ")[0]
-			if x.startswith("vt "):
-				vtlist.append([round(float(x.split(" ")[1])*16*4)/4,round(float(x.split(" ")[2])*16*4)/4])
-				
-		currentVertex=0
-		for line in obj:
-			x=str(line)
-			if x.startswith("v "):
-				currentVertex+=1
-				vertex=re.sub("v ","", x).strip()
-				points=vertex.split(" ")
-				for x in range(len(points)):
-					points[x]=str(round(float(points[x])*4*scalar)/4)
-				vertex=",".join(points)
-				if currentVertex==vertices:
-					f.write("{"+vertex+"}\n")
-				else:
-					f.write("{"+vertex+"},\n")
-			
-				
-		f.write("},\n")
-		f.write("f={\n")
-		currentFace=0
-		for line in obj:
-			x=str(line)
-			if x.startswith("f "):
-				currentFace+=1
-				face=re.sub("f ","", x).strip()
-				faceVertices=face.split(" ");
-				Tvertex=[]
-				for x in range(len(faceVertices)):
-					if len(vtlist)>0:
-						Tvertex.append(faceVertices[x].split("/")[1])
-					faceVertices[x]=faceVertices[x].split("/")[0]
-				face=",".join(faceVertices)
-				#-1,-0.25,  17,-0.25,  16.25,15,  -0.75,15
-				#
-				#
-				if currentFace==faces:
-					f.write("{"+face+",c=11, dbl=1,")					
-					f.write("uv={")
-					for faceVertex in range(len(faceVertices)):
-						if len(vtlist)>0:
-							uvVertexPair=str(vtlist[int(Tvertex[faceVertex])-1][0])+","+str(vtlist[int(Tvertex[faceVertex])-1][1])
-						else:
-							uvVertexPair=str(int(math.sin(faceVertex/len(faceVertices)*2*math.pi+math.pi/4)*8*16/11.5)/4+8)+","+str(int(math.cos(faceVertex/len(faceVertices)*2*math.pi+math.pi/4)*16*16/11.5)/4+8)
-						if faceVertex==len(faceVertices)-1:
-							f.write(uvVertexPair)
-						else:
-							f.write(uvVertexPair+",")
-					f.write("} }\n")
-				else:
-					f.write("{"+face+",c=11, dbl=1,")					
-					f.write("uv={")
-					
-					for faceVertex in range(len(faceVertices)):
-						if len(vtlist)>0:
-							uvVertexPair=str(vtlist[int(Tvertex[faceVertex])-1][0])+","+str(vtlist[int(Tvertex[faceVertex])-1][1])
-						else:
-							uvVertexPair=str(int(math.sin(faceVertex/len(faceVertices)*2*math.pi+math.pi/4)*8*16/11.5)/4+8)+","+str(int(math.cos(faceVertex/len(faceVertices)*2*math.pi+math.pi/4)*16*16/11.5)/4+8)
-						if faceVertex==len(faceVertices)-1:
-							f.write(uvVertexPair)
-						else:
-							f.write(uvVertexPair+",")
-					f.write("} },\n")
-		f.write("} \n")
-		f.write("}\n"+
-	"}%\n"+
-	"99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999\n"+
+endstring=str("99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999\n"+
 	"99999999999999999999999999999999999999944999999999999999999999999999999999999999999999999999999999999999999999999999999999999999\n"+
 	"99999999999999999999999999999999999999499999999999999999999999999999999999999999999999999999999999999999999999999999999999999999\n"+
 	"99999999999999999999999999999999999940499999999999999999999999999999999999999999999999999999999999999999999999999999999999999999\n"+
@@ -216,6 +134,151 @@ with open(sys.argv[1]) as n:
 	"09909999099999999099999999990999909909900009990909090990909999999999999940499999999999999999999999999999999999999999999999999999\n"+
 	"00099999099999099099999999099099909909909990990909090990909999999999994504999999999999999999999999999999999999999999999999999999\n"+
 	"99999999099999999000009909900999909909909990999090990990900000999999940049999999999999999999999999999999999999999999999999999999\n")
+uvScalar=1
+try:
+        scalar=float(sys.argv[2])
+        print("scaling:"+ str(scalar))
+except:
+        print("scaling:"+ str(scalar))
+with open("object"+file+".txt","w") as f:
+	f.write("picocad;obj"+file+";0;1;0\n{\n{"+"\n"+"name='obj', pos={0,0,0}, rot={0,0,0},"+"\n"+"v={\n")
+with open(sys.argv[1]) as n:
+	with open("object"+file+".txt","a") as f:	
+		obj=n.read().split("\n")
+		f
+		for line in obj:
+			x=str(line)
+			if x.startswith("mtllib"):
+				mtl=x.split(" ")[1]
+		try:
+			if mtl:
+				with open(mtl,"r") as mtl:
+					x=mtl.read().split("\n")
+					for line in x:
+						if line.startswith("map_kd "):
+							png=re.sub("map_kd ","",line)
+					with Image.open(png) as IMAGE:
+						xratio=IMAGE.size[0]/IMAGE.size[1]
+						yration=IMAGE.size[1]/IMAGE.size[0]
+						if xratio>1:
+							nim=IMAGE.resize((128,yratio*128))#xratio=128/(128*yration) | xratio=1/yratio
+						elif yration>1:
+							nim=IMAGE.resize((xratio*128,128))
+						else:
+							nim=IMAGE.resize((128,128))	
+						uvScalar=nim.size[0]/IMAGE.size[0]
+						cList = [
+							[(0, 0, 0),"0"],
+							[(29, 43, 83),"1"],
+							[(126, 37, 83),"2"],
+							[(0, 135, 81),"3"],
+							[(171, 82, 54),"4"],
+							[(95, 87, 79),"5"],
+							[(194, 195, 199),"6"],
+							[(255, 241, 232),"7"],
+							[(255, 0, 77),"8"],
+							[(255, 163, 0),"9"],
+							[(255, 236, 39),"a"],
+							[(0, 228, 54),"b"],
+							[(41, 173, 255),"c"],
+							[(131, 118, 156),"d"],
+							[(255, 119, 168),"e"],
+							[(255, 204, 170),"f"]
+						]
+						px=nim.load()
+						xList=[]
+						nList=[]
+						for y in range(128):
+							for x in range(128):
+								pixel=px[x,y]
+								for item in cList:
+									if pixel[0]<30+item[0][0] and pixel[0]>-30+item[0][0] and pixel[1]<30+item[0][1] and pixel[1]>-30+item[0][1] and pixel[2]<30+item[0][2] and pixel[2]>-30+item[0][2]:
+										nPixel=item[1]
+								xList.append(nPixel)
+							nList.append("".join(xList))
+							xList=[]
+						endstring="\n".join(nList)+"\n"
+		except:
+			print("something went wrong when trying to load the texture file. Either It, or the .mtl file does not exist, or pillow is not installed")
+		for line in obj:
+			x=str(line)
+			if x.startswith("v "):
+				vertices+=1
+			if x.startswith("f "):
+				faces+=1
+			if x.startswith("vt "):
+				vtlist.append([round(float(x.split(" ")[1])*16*4*uvScalar)/4,(round(float(x.split(" ")[2])*16*4*uvScalar)/4-8)*-1+8])
+				
+		currentVertex=0
+		for line in obj:
+			x=str(line)
+			if x.startswith("v "):
+				currentVertex+=1
+				vertex=re.sub("v ","", x).strip()
+				points=vertex.split(" ")
+				for x in range(len(points)):
+					points[x]=str(round(float(points[x])*4*scalar)/4)
+				vertex=",".join(points)
+				if currentVertex==vertices:
+					f.write("{"+vertex+"}\n")
+				else:
+					f.write("{"+vertex+"},\n")
+			
+				
+		f.write("},\n")
+		f.write("f={\n")
+		currentFace=0
+		for line in obj:
+			x=str(line)
+			if x.startswith("f "):
+				currentFace+=1
+				face=re.sub("f ","", x).strip()
+				faceVertices=face.split(" ");
+				Tvertex=[]
+				for x in range(len(faceVertices)):
+					if len(vtlist)>0:
+						Tvertex.append(faceVertices[x].split("/")[1])
+					faceVertices[x]=faceVertices[x].split("/")[0]
+				face=",".join(faceVertices)
+				#-1,-0.25,  17,-0.25,  16.25,15,  -0.75,15
+				#
+				#
+				if currentFace==faces:
+					f.write("{"+face+",c=11, dbl=1,")					
+					f.write("uv={")
+					for faceVertex in range(len(faceVertices)):
+						if len(vtlist)>0:
+							uvVertexPair=str(vtlist[int(Tvertex[faceVertex])-1][0])+","+str(vtlist[int(Tvertex[faceVertex])-1][1])
+						else:
+							uvVertexPair=str(int(math.sin(faceVertex/len(faceVertices)*2*math.pi+math.pi/4)*8*16/11.5)/4+8)+","+str(int(math.cos(faceVertex/len(faceVertices)*2*math.pi+math.pi/4)*16*16/11.5)/4+8)
+						if faceVertex==len(faceVertices)-1:
+							f.write(uvVertexPair)
+						else:
+							f.write(uvVertexPair+",")
+					f.write("} }\n")
+				else:
+					f.write("{"+face+",c=11, dbl=1,")					
+					f.write("uv={")
+					
+					for faceVertex in range(len(faceVertices)):
+						if len(vtlist)>0:
+							uvVertexPair=str(vtlist[int(Tvertex[faceVertex])-1][0])+","+str(vtlist[int(Tvertex[faceVertex])-1][1])
+						else:
+							uvVertexPair=str(int(math.sin(faceVertex/len(faceVertices)*2*math.pi+math.pi/4)*8*16/11.5)/4+8)+","+str(int(math.cos(faceVertex/len(faceVertices)*2*math.pi+math.pi/4)*16*16/11.5)/4+8)
+						if faceVertex==len(faceVertices)-1:
+							f.write(uvVertexPair)
+						else:
+							f.write(uvVertexPair+",")
+					f.write("} },\n")
+		
+				
+				
+				
+				
+		f.write("} \n")
+		f.write("}\n"+
+	"}%\n"+endstring
+	)
 print(str(vertices)+" vertices exported")
 print(str(faces)+" faces exported")
 	
