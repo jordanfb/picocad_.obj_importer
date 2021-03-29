@@ -218,7 +218,6 @@ with open(sys.argv[1]) as n:
 										pos=pos-1
 									pList[pos]=cval	
 								if y==64:
-									print("\n\n",pList)
 								nPixel=pList[0][1]
 								xList.append(nPixel)
 							nList.append("".join(xList))
