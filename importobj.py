@@ -198,10 +198,28 @@ with open(sys.argv[1]) as n:
 						for y in range(128):
 							for x in range(128):
 								pixel=px[x,y]
+								pList=[]
 								for item in cList:
-									Range=60
-									if pixel[0]<Range+item[0][0] and pixel[0]>-Range+item[0][0] and pixel[1]<Range+item[0][1] and pixel[1]>-Range+item[0][1] and pixel[2]<Range+item[0][2] and pixel[2]>-Range+item[0][2]:
-										nPixel=item[1]
+									pItem0=item[0][0]-pixel[0]
+									if pItem0<0:
+										pItem0=-pItem0
+									pItem1=item[0][1]-pixel[1]
+									if pItem1<0:
+										pItem1=-pItem1
+									pItem2=item[0][2]-pixel[2]
+									if pItem2<0:
+										pItem2=-pItem2
+									pList.append([(pItem0,pItem1,pItem2),item[1]])
+								for num in range(1,len(pList)):
+									pos=num
+									cval=pList[num]
+									while pos>0 and pList[pos-1][0][0]+pList[pos-1][0][1]+pList[pos-1][0][2]>cval[0][0]+cval[0][1]+cval[0][2]:
+										pList[pos]=pList[pos-1]
+										pos=pos-1
+									pList[pos]=cval	
+								if y==64:
+									print("\n\n",pList)
+								nPixel=pList[0][1]
 								xList.append(nPixel)
 							nList.append("".join(xList))
 							xList=[]
