@@ -150,23 +150,30 @@ with open(sys.argv[1]) as n:
 			x=str(line)
 			if x.startswith("mtllib"):
 				mtl=x.split(" ")[1]
-		try:
+		if True:#try:
 			if mtl:
 				with open(mtl,"r") as mtl:
 					x=mtl.read().split("\n")
 					for line in x:
-						if line.startswith("map_kd "):
-							png=re.sub("map_kd ","",line)
+						if line.strip().startswith("map_kd "):
+							png=re.sub("map_kd ","",line.strip())
+						if line.strip().startswith("map_Kd "):
+							png=re.sub("map_Kd ","",line.strip())
 					with Image.open(png) as IMAGE:
 						xratio=IMAGE.size[0]/IMAGE.size[1]
-						yration=IMAGE.size[1]/IMAGE.size[0]
+						yratio=IMAGE.size[1]/IMAGE.size[0]
 						if xratio>1:
-							nim=IMAGE.resize((128,yratio*128))#xratio=128/(128*yration) | xratio=1/yratio
-						elif yration>1:
-							nim=IMAGE.resize((xratio*128,128))
+							nim=Image.new("RGB",(128,128))
+							temp=IMAGE.resize((128,round(yratio*128)))#xratio=128/(128*yration) | xratio=1/yratio
+							nim.paste(temp,(0,0))
+						elif yratio>1:
+							nim=Image.new("RGB",(128,128))
+							temp=IMAGE.resize((round(xratio*128),128))
+							nim.paste(temp,(0,0))
 						else:
 							nim=IMAGE.resize((128,128))	
-						uvScalar=nim.size[0]/IMAGE.size[0]
+						uvScalarX=nim.size[0]/IMAGE.size[0]
+						uvScalarY=nim.size[1]/IMAGE.size[1]
 						cList = [
 							[(0, 0, 0),"0"],
 							[(29, 43, 83),"1"],
@@ -192,14 +199,15 @@ with open(sys.argv[1]) as n:
 							for x in range(128):
 								pixel=px[x,y]
 								for item in cList:
-									if pixel[0]<30+item[0][0] and pixel[0]>-30+item[0][0] and pixel[1]<30+item[0][1] and pixel[1]>-30+item[0][1] and pixel[2]<30+item[0][2] and pixel[2]>-30+item[0][2]:
+									Range=60
+									if pixel[0]<Range+item[0][0] and pixel[0]>-Range+item[0][0] and pixel[1]<Range+item[0][1] and pixel[1]>-Range+item[0][1] and pixel[2]<Range+item[0][2] and pixel[2]>-Range+item[0][2]:
 										nPixel=item[1]
 								xList.append(nPixel)
 							nList.append("".join(xList))
 							xList=[]
 						endstring="\n".join(nList)+"\n"
-		except:
-			print("something went wrong when trying to load the texture file. Either It, or the .mtl file does not exist, or pillow is not installed")
+		#except:
+			#print("something went wrong when trying to load the texture file. Either It, or the .mtl file does not exist, or pillow is not installed")
 		for line in obj:
 			x=str(line)
 			if x.startswith("v "):
@@ -207,7 +215,7 @@ with open(sys.argv[1]) as n:
 			if x.startswith("f "):
 				faces+=1
 			if x.startswith("vt "):
-				vtlist.append([round(float(x.split(" ")[1])*16*4*uvScalar)/4,(round(float(x.split(" ")[2])*16*4*uvScalar)/4-8)*-1+8])
+				vtlist.append([round(float(x.split(" ")[1])*16*4*uvScalarX)/4,(round(float(x.split(" ")[2])*16*4*uvScalarY)/4-8)*-1+8])
 				
 		currentVertex=0
 		for line in obj:
