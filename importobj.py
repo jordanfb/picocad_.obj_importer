@@ -8,6 +8,8 @@ file=str(file)
 vertices=0
 faces=0
 scalar=1
+vtlist=[]
+mtl=None
 try:
         scalar=float(sys.argv[2])
         print("scaling:"+ str(scalar))
@@ -25,6 +27,11 @@ with open(sys.argv[1]) as n:
 				vertices+=1
 			if x.startswith("f "):
 				faces+=1
+			if x.startswith("mtllib"):
+				mtl=x.split(" ")[0]
+			if x.startswith("vt "):
+				vtlist.append([int(float(x.split(" ")[1])*16*4)/4,int(float(x.split(" ")[2])*16*4)/4])
+				
 		currentVertex=0
 		for line in obj:
 			x=str(line)
@@ -39,7 +46,8 @@ with open(sys.argv[1]) as n:
 					f.write("{"+vertex+"}\n")
 				else:
 					f.write("{"+vertex+"},\n")
-		
+			
+				
 		f.write("},\n")
 		f.write("f={\n")
 		currentFace=0
@@ -49,7 +57,10 @@ with open(sys.argv[1]) as n:
 				currentFace+=1
 				face=re.sub("f ","", x).strip()
 				faceVertices=face.split(" ");
+				Tvertex=[]
 				for x in range(len(faceVertices)):
+					if len(vtlist)>0:
+						Tvertex.append(faceVertices[x].split("/")[1])
 					faceVertices[x]=faceVertices[x].split("/")[0]
 				face=",".join(faceVertices)
 				#-1,-0.25,  17,-0.25,  16.25,15,  -0.75,15
@@ -58,9 +69,11 @@ with open(sys.argv[1]) as n:
 				if currentFace==faces:
 					f.write("{"+face+",c=11, dbl=1,")					
 					f.write("uv={")
-					
 					for faceVertex in range(len(faceVertices)):
-						uvVertexPair=str(int(math.sin(faceVertex/len(faceVertices)*2*math.pi+math.pi/4)*16*16/11.5)/4+8)+","+str(int(math.cos(faceVertex/len(faceVertices)*2*math.pi+math.pi/4)*16*16/11.5)/4+8)
+						if len(vtlist)>0:
+							uvVertexPair=str(vtlist[int(Tvertex[faceVertex])-1][0])+","+str(vtlist[int(Tvertex[faceVertex])-1][1])
+						else:
+							uvVertexPair=str(int(math.sin(faceVertex/len(faceVertices)*2*math.pi+math.pi/4)*8*16/11.5)/4+8)+","+str(int(math.cos(faceVertex/len(faceVertices)*2*math.pi+math.pi/4)*16*16/11.5)/4+8)
 						if faceVertex==len(faceVertices)-1:
 							f.write(uvVertexPair)
 						else:
@@ -71,7 +84,10 @@ with open(sys.argv[1]) as n:
 					f.write("uv={")
 					
 					for faceVertex in range(len(faceVertices)):
-						uvVertexPair=str(int(math.sin(faceVertex/len(faceVertices)*2*math.pi+math.pi/4)*16*16/11.5)/4+8)+","+str(int(math.cos(faceVertex/len(faceVertices)*2*math.pi+math.pi/4)*16*16/11.5)/4+8)
+						if len(vtlist)>0:
+							uvVertexPair=str(vtlist[int(Tvertex[faceVertex])-1][0])+","+str(vtlist[int(Tvertex[faceVertex])-1][1])
+						else:
+							uvVertexPair=str(int(math.sin(faceVertex/len(faceVertices)*2*math.pi+math.pi/4)*8*16/11.5)/4+8)+","+str(int(math.cos(faceVertex/len(faceVertices)*2*math.pi+math.pi/4)*16*16/11.5)/4+8)
 						if faceVertex==len(faceVertices)-1:
 							f.write(uvVertexPair)
 						else:
