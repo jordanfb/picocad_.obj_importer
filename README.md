@@ -11,7 +11,9 @@ I used meshlab's "quadratic edge collapse decimation" to do this for meshes that
 Not by picocad's standards ;)
 
 I ran the toaster example through the .obj exporter, and back through this .obj importer:
-before:  
+
+
+## before:  
 ![alt text](https://github.com/Zinc-OS/picocad_.obj_importer/blob/main/files/picocad_4.gif)  
-after:  
+## after:  
 ![alt text](https://github.com/Zinc-OS/picocad_.obj_importer/blob/main/files/picocad_3.gif)  
