@@ -150,7 +150,7 @@ with open(sys.argv[1]) as n:
 			x=str(line)
 			if x.startswith("mtllib"):
 				mtl=x.split(" ")[1]
-		if True:#try:
+		try:
 			if mtl:
 				with open(mtl,"r") as mtl:
 					x=mtl.read().split("\n")
@@ -222,8 +222,8 @@ with open(sys.argv[1]) as n:
 							nList.append("".join(xList))
 							xList=[]
 						endstring="\n".join(nList)+"\n"
-		#except:
-			#print("something went wrong when trying to load the texture file. Either It, or the .mtl file does not exist, or pillow is not installed")
+		except:
+			print("something went wrong when trying to load the texture file. Either It, or the .mtl file does not exist, or pillow is not installed")
 		for line in obj:
 			x=str(line)
 			if x.startswith("v "):
