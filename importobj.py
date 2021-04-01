@@ -225,7 +225,7 @@ with open(sys.argv[1]) as n:
 							xList=[]
 						endstring="\n".join(nList)+"\n"
 		except:
-			print("something went wrong when trying to load the texture file. Either It, or the .mtl file does not exist, or pillow is not installed")
+			print("something went wrong when trying to load the texture file. Either It, or the .mtl file does not exist")
 		for line in obj:
 			x=str(line)
 			if x.startswith("v "):
