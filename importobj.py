@@ -146,7 +146,6 @@ def convert_obj(input_filepath, output_filepath, scalar = 1):
 	with open(input_filepath) as n:
 		with open(output_filepath,"a") as f:
 			obj=n.read().split("\n")
-			f
 			for line in obj:
 				x=str(line)
 				if x.startswith("mtllib"):
